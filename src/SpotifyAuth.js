@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const CLIENT_ID = "your_spotify_client_id";
-const REDIRECT_URI = "https://your-vercel-app-url.vercel.app";
+const REDIRECT_URI = "https://song-port.vercel.app/";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
 const SCOPES = "user-library-read"; // Allows reading liked songs
