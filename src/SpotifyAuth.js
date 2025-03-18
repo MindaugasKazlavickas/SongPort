@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const CLIENT_ID = "your_spotify_client_id";
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = "https://song-port.vercel.app/";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
