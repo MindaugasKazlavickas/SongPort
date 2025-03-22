@@ -55,7 +55,7 @@ export async function searchSongsOnAppleMusic(songs) {
 
 async function getAppleMusicToken() {
     try {
-        const response = await fetch("/api/apple-music-token");
+        const response = await fetch("/api/get-token");
         if (!response.ok) throw new Error("Failed to fetch Apple Music token");
         const data = await response.json();
         return data.token;
