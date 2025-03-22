@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const APPLE_MUSIC_API = "https://api.music.apple.com/v1/catalog/us/search";
 
 async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
