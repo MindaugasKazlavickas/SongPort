@@ -1,4 +1,5 @@
 import { useState, useEffect} from "react";
+import { searchSongsOnAppleMusic, addSongsToAppleMusic } from "./AppleMusic";
 
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = "https://song-port.vercel.app/";
@@ -10,6 +11,8 @@ export default function SpotifyAuth() {
     const [token, setToken] = useState(null);
     const [likedSongsCount, setLikedSongsCount] = useState(null);
     const [songs, setSongs] = useState([]);
+    const [foundSongs, setFoundSongs] = useState([]);
+    const [notFoundSongs, setNotFoundSongs] = useState([]);
 
     useEffect(() => {
         // Get token from URL hash if available
@@ -67,6 +70,12 @@ export default function SpotifyAuth() {
         setLikedSongsCount(fetchedSongs.length);
     };
 
+    const handleSearchAppleMusic = async () => {
+        const { foundSongs, notFoundSongs } = await searchSongsOnAppleMusic(songs);
+        setFoundSongs(foundSongs);
+        setNotFoundSongs(notFoundSongs);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
             <h1 className="text-3xl font-bold mb-6">Song Port</h1>
@@ -83,17 +92,22 @@ export default function SpotifyAuth() {
                 <p className="text-xl mt-4">Total Liked Songs: {likedSongsCount}</p>
             )}
 
-            {/* Display the list of songs */}
-            <div className="mt-6">
-                <h2 className="text-2xl font-bold">Liked Songs:</h2>
-                <ul className="space-y-2">
-                    {songs.map((song, index) => (
-                        <li key={index} className="text-lg">
-                            <strong>{song.title}</strong> by {song.artist} ({song.album})
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {songs.length > 0 && (
+                <button onClick={handleSearchAppleMusic} className="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-400">
+                    Find on Apple Music
+                </button>
+            )}
+
+            {foundSongs.length > 0 || notFoundSongs.length > 0 ? (
+                <div className="mt-6">
+                    <h2 className="text-2xl font-bold">Search Results:</h2>
+                    <p className="text-lg">Found: {foundSongs.length} ({((foundSongs.length / songs.length) * 100).toFixed(2)}%)</p>
+                    <p className="text-lg">Not Found: {notFoundSongs.length}</p>
+                    <button onClick={() => addSongsToAppleMusic(foundSongs)} className="mt-4 px-6 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-400">
+                        Add First 5 to Apple Music
+                    </button>
+                </div>
+            ) : null}
 
         </div>
     );
