@@ -1,24 +1,25 @@
-const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const path = require("path");
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 
-// Load private key
-const privateKey = fs.readFileSync(path.join(__dirname, "AuthKey.p8"), "utf8");
+dotenv.config();
 
 // Apple Developer Credentials
-const TEAM_ID = "YOUR_TEAM_ID"; // Found in Apple Developer Account
-const KEY_ID = "YOUR_KEY_ID"; // Found in Apple Developer > Music Keys
+const TEAM_ID = process.env.APPLE_TEAM_ID; // Found in Apple Developer Account
+const KEY_ID = process.env.APPLE_KEY_ID; // Found in Apple Developer > Music Keys
 const TOKEN_EXPIRATION = "180d"; // Valid for 180 days
 
-function generateAppleMusicToken() {
-    const jwtToken = jwt.sign({}, privateKey, {
+// Load private key from an environment variable
+const privateKey = process.env.APPLE_AUTH_KEY?.replace(/\\n/g, "\n");
+
+if (!privateKey) {
+    throw new Error("Missing Apple Developer private key (APPLE_AUTH_KEY)");
+}
+
+export function generateAppleMusicToken() {
+    return jwt.sign({}, privateKey, {
         algorithm: "ES256",
         expiresIn: TOKEN_EXPIRATION,
         keyid: KEY_ID,
         issuer: TEAM_ID,
     });
-
-    return jwtToken;
 }
-
-module.exports = generateAppleMusicToken;

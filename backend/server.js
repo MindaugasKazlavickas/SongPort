@@ -1,15 +1,23 @@
-const express = require("express");
-const cors = require("cors");
-const generateAppleMusicToken = require("./generateAppleMusicToken");
+import express from "express";
+import cors from "cors";
+import { generateAppleMusicToken } from "./generateAppleToken.js";
 
 const app = express();
-app.use(cors());
+
+// Allow CORS for your frontend only (change the origin)
+app.use(cors({ origin: "https://yourfrontenddomain.com" }));
 
 app.get("/get-token", (req, res) => {
-    const token = generateAppleMusicToken();
-    res.json(token);
+    try {
+        const token = generateAppleMusicToken();
+        res.json({ token });
+    } catch (error) {
+        console.error("Failed to generate Apple Music token:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
