@@ -52,7 +52,7 @@ export async function searchSongsOnAppleMusic(songs) {
         return { foundSongs: [], notFoundSongs: songs };
     }
 }
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 async function getAppleMusicToken() {
     try {
@@ -76,7 +76,7 @@ export async function addSongsToAppleMusic(songs) {
             return;
         }
 
-        const songIds = songs.slice(0, 5).map(song => song.appleMusicId); // Limit to 5
+        const songIds = songs.slice(0, 5).map(song => song.appleMusicId);
 
         const response = await fetch("https://api.music.apple.com/v1/me/library", {
             method: "POST",
