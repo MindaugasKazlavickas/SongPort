@@ -4,7 +4,6 @@ import { generateAppleMusicToken } from "./generateAppleToken.js";
 
 const app = express();
 
-// Allow CORS for your frontend only (change the origin)
 app.use(cors({ origin: "https://song-port.vercel.app" }));
 
 app.get("/get-token", (req, res) => {
