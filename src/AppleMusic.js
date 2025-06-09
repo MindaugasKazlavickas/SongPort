@@ -52,10 +52,11 @@ export async function searchSongsOnAppleMusic(songs) {
         return { foundSongs: [], notFoundSongs: songs };
     }
 }
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function getAppleMusicToken() {
     try {
-        const response = await fetch("/api/get-token");
+        const response = await fetch(`${BACKEND_URL}/get-token`);
         if (!response.ok) throw new Error("Failed to fetch Apple Music token");
         const data = await response.json();
         return data.token;
